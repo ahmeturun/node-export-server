@@ -1,6 +1,6 @@
 //Include the exporter module
 const exporter = require('./../../lib/index.js');
-
+const path = require('path');
 //Export settings 
 var exportSettings = {
     type: 'png',
@@ -44,7 +44,8 @@ exporter.logLevel(4);
 
 //Set up a pool of PhantomJS workers
 exporter.initPool({
-    maxWorkers: 1
+    maxWorkers: 1,
+    worker: path.resolve(__dirname, './../../phantom/worker.js')
 });
 
 //Perform an export
@@ -58,6 +59,8 @@ exporter.export(exportSettings, function (err, res) {
     //If the output is a PDF or SVG, it will contain a filename (res.filename).
 
     //Kill the pool when we're done with it, and exit the application
+    console.log(err);
+    console.log(res);
     exporter.killPool();
     process.exit(1);
 });
